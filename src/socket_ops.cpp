@@ -35,7 +35,7 @@ namespace socket_ops {
 		return (success);
 	}
 
-	inline ::ssize_t recvfrom(
+	inline ssize_t recvfrom(
 		socket_type sockfd,
 		void *buffer,
 		size_t len,
@@ -44,11 +44,11 @@ namespace socket_ops {
 		socklen_t *addrlen
 	)
 	{
-		::ssize_t bytes = ::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
+		ssize_t bytes = ::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
 		return (bytes);
 	}
 
-	::ssize_t sync_recvfrom(
+	ssize_t sync_recvfrom(
 		socket_type sockfd,
 		void *buffer,
 		size_t len,
@@ -57,7 +57,7 @@ namespace socket_ops {
 		socklen_t *addrlen
 	)
 	{
-		::ssize_t bytes = 0;
+		ssize_t bytes = 0;
 
 		for (;;)
 		{
@@ -65,6 +65,39 @@ namespace socket_ops {
 			if (bytes >= 0)
 				return (bytes);
 			if (!poll_read(sockfd))
+				return (0);
+		}
+	}
+
+	inline ssize_t sendto(
+		socket_type sockfd,
+		const void* buffer,
+		size_t len,
+		int flags,
+		const struct sockaddr *addr,
+		socklen_t addrlen
+	)
+	{
+		ssize_t bytes = ::sendto(sockfd, buffer, len, flags, addr, addrlen);
+		return (bytes);
+	}
+
+	ssize_t sync_sendto(
+		socket_type sockfd,
+		void *buffer,
+		size_t len,
+		int flags,
+		struct sockaddr *addr,
+		socklen_t *addrlen
+	)
+	{
+		ssize_t bytes = 0;
+		for (;;)
+		{
+			bytes = socket_ops::sendto(sockfd, buffer, len, flags, addr, addrlen);
+			if (bytes >= 0)
+				return (bytes);
+			if (!poll_write(sockfd))
 				return (0);
 		}
 	}
@@ -84,6 +117,20 @@ namespace socket_ops {
 		pollfd fds;
 		fds.fd = sockfd;
 		fds.events = POLLIN;
+		fds.revents = 0;
+		int result = socket_ops::poll(&fds, 1, -1);
+		if (result == 0)
+			return (false);
+		else if (result == socket_error)
+			return (false);
+		return (true);
+	}
+
+	bool poll_write(socket_type sockfd)
+	{
+		pollfd fds;
+		fds.fd = sockfd;
+		fds.events = POLLOUT;
 		fds.revents = 0;
 		int result = socket_ops::poll(&fds, 1, -1);
 		if (result == 0)
