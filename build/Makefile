@@ -36,10 +36,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/asnar_r/Documents/Projects/Epitech/C++/NetIO
+CMAKE_SOURCE_DIR = /home/romsi/Documents/Projects/Epitech/C++/NetIO
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build
+CMAKE_BINARY_DIR = /home/romsi/Documents/Projects/Epitech/C++/NetIO/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -66,9 +66,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -132,6 +132,30 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/socket_ops.o: src/socket_ops.cpp.o
+.PHONY : src/socket_ops.o
+
+# target to build an object file
+src/socket_ops.cpp.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/socket_ops.cpp.o
+.PHONY : src/socket_ops.cpp.o
+
+src/socket_ops.i: src/socket_ops.cpp.i
+.PHONY : src/socket_ops.i
+
+# target to preprocess a source file
+src/socket_ops.cpp.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/socket_ops.cpp.i
+.PHONY : src/socket_ops.cpp.i
+
+src/socket_ops.s: src/socket_ops.cpp.s
+.PHONY : src/socket_ops.s
+
+# target to generate assembly for a file
+src/socket_ops.cpp.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/socket_ops.cpp.s
+.PHONY : src/socket_ops.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -144,6 +168,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/socket_ops.o"
+	@echo "... src/socket_ops.i"
+	@echo "... src/socket_ops.s"
 .PHONY : help
 
 

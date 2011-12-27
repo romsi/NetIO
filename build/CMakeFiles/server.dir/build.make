@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/asnar_r/Documents/Projects/Epitech/C++/NetIO
+CMAKE_SOURCE_DIR = /home/romsi/Documents/Projects/Epitech/C++/NetIO
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build
+CMAKE_BINARY_DIR = /home/romsi/Documents/Projects/Epitech/C++/NetIO/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/server.dir/depend.make
@@ -46,19 +46,42 @@ include CMakeFiles/server.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/server.dir/flags.make
 
+CMakeFiles/server.dir/src/socket_ops.cpp.o: CMakeFiles/server.dir/flags.make
+CMakeFiles/server.dir/src/socket_ops.cpp.o: ../src/socket_ops.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/server.dir/src/socket_ops.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/server.dir/src/socket_ops.cpp.o -c /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/socket_ops.cpp
+
+CMakeFiles/server.dir/src/socket_ops.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/src/socket_ops.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/socket_ops.cpp > CMakeFiles/server.dir/src/socket_ops.cpp.i
+
+CMakeFiles/server.dir/src/socket_ops.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/src/socket_ops.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/socket_ops.cpp -o CMakeFiles/server.dir/src/socket_ops.cpp.s
+
+CMakeFiles/server.dir/src/socket_ops.cpp.o.requires:
+.PHONY : CMakeFiles/server.dir/src/socket_ops.cpp.o.requires
+
+CMakeFiles/server.dir/src/socket_ops.cpp.o.provides: CMakeFiles/server.dir/src/socket_ops.cpp.o.requires
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/socket_ops.cpp.o.provides.build
+.PHONY : CMakeFiles/server.dir/src/socket_ops.cpp.o.provides
+
+CMakeFiles/server.dir/src/socket_ops.cpp.o.provides.build: CMakeFiles/server.dir/src/socket_ops.cpp.o
+
 CMakeFiles/server.dir/src/main.cpp.o: CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/src/main.cpp.o: ../src/main.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/server.dir/src/main.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/server.dir/src/main.cpp.o -c /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/src/main.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/server.dir/src/main.cpp.o -c /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/main.cpp
 
 CMakeFiles/server.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/src/main.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/src/main.cpp > CMakeFiles/server.dir/src/main.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/main.cpp > CMakeFiles/server.dir/src/main.cpp.i
 
 CMakeFiles/server.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/src/main.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/src/main.cpp -o CMakeFiles/server.dir/src/main.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/romsi/Documents/Projects/Epitech/C++/NetIO/src/main.cpp -o CMakeFiles/server.dir/src/main.cpp.s
 
 CMakeFiles/server.dir/src/main.cpp.o.requires:
 .PHONY : CMakeFiles/server.dir/src/main.cpp.o.requires
@@ -71,11 +94,13 @@ CMakeFiles/server.dir/src/main.cpp.o.provides.build: CMakeFiles/server.dir/src/m
 
 # Object files for target server
 server_OBJECTS = \
+"CMakeFiles/server.dir/src/socket_ops.cpp.o" \
 "CMakeFiles/server.dir/src/main.cpp.o"
 
 # External object files for target server
 server_EXTERNAL_OBJECTS =
 
+../bin/server: CMakeFiles/server.dir/src/socket_ops.cpp.o
 ../bin/server: CMakeFiles/server.dir/src/main.cpp.o
 ../bin/server: CMakeFiles/server.dir/build.make
 ../bin/server: CMakeFiles/server.dir/link.txt
@@ -86,6 +111,7 @@ server_EXTERNAL_OBJECTS =
 CMakeFiles/server.dir/build: ../bin/server
 .PHONY : CMakeFiles/server.dir/build
 
+CMakeFiles/server.dir/requires: CMakeFiles/server.dir/src/socket_ops.cpp.o.requires
 CMakeFiles/server.dir/requires: CMakeFiles/server.dir/src/main.cpp.o.requires
 .PHONY : CMakeFiles/server.dir/requires
 
@@ -94,6 +120,6 @@ CMakeFiles/server.dir/clean:
 .PHONY : CMakeFiles/server.dir/clean
 
 CMakeFiles/server.dir/depend:
-	cd /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/asnar_r/Documents/Projects/Epitech/C++/NetIO /home/asnar_r/Documents/Projects/Epitech/C++/NetIO /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build /home/asnar_r/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles/server.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/romsi/Documents/Projects/Epitech/C++/NetIO/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/romsi/Documents/Projects/Epitech/C++/NetIO /home/romsi/Documents/Projects/Epitech/C++/NetIO /home/romsi/Documents/Projects/Epitech/C++/NetIO/build /home/romsi/Documents/Projects/Epitech/C++/NetIO/build /home/romsi/Documents/Projects/Epitech/C++/NetIO/build/CMakeFiles/server.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/server.dir/depend
 
