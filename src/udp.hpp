@@ -1,5 +1,5 @@
-#ifndef _IP_HPP_
-# define _IP_HPP_
+#ifndef _UDP_HPP_
+# define _UDP_HPP_
 
 # include <sys/socket.h>
 # include <netinet/in.h>
@@ -21,4 +21,4 @@ namespace ip {
 } // !ip
 } // !netio
 
-#endif /* !_IP_HPP_ */
+#endif /* !_UDP_HPP_ */
