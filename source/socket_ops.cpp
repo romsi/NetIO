@@ -20,29 +20,28 @@ namespace socket_ops {
 		int protocol
 	)
 	{
-		socket_type sockfd = ::socket(domain, type, protocol);
-		if (sockfd == invalid_socket)
-			return (invalid_socket);
+		netio::detail::socket_type sockfd = ::socket(domain, type, protocol);
+		if (sockfd == netio::detail::invalid_socket)
+			return (netio::detail::invalid_socket);
 		return (sockfd);
 	}
 
 	bool bind(
-		socket_type sockfd,
+		netio::detail::socket_type sockfd,
 		struct sockaddr *addr,
 		socklen_t addrlen
 	)
 	{
-		bool success = ::bind(sockfd, addr, addrlen);
-		if (!success)
+		if (::bind(sockfd, addr, addrlen) == -1)
 		{
 			::close(sockfd);
-			return (!success);
+			return (false);
 		}
-		return (success);
+		return (true);
 	}
 
 	ssize_t recvfrom(
-		socket_type sockfd,
+		netio::detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -51,11 +50,27 @@ namespace socket_ops {
 	)
 	{
 		ssize_t bytes = ::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
+		if (bytes == -1)
+		{
+			switch (errno)
+			{
+				case EBADF : std::cout << "EBADF" << std::endl; break;
+				case EAGAIN : std::cout << "EAGAIN" << std::endl; break;
+				case ECONNREFUSED : std::cout << "ECONNREFUSED" << std::endl; break;
+				case EFAULT : std::cout << "EFAULT" << std::endl; break;
+				case EINTR : std::cout << "EINTR" << std::endl; break;
+				case EINVAL : std::cout << "EINVAL" << std::endl; break;
+				case ENOMEM : std::cout << "ENOMEM" << std::endl; break;
+				case ENOTCONN : std::cout << "ENOTCONN" << std::endl; break;
+				case ENOTSOCK : std::cout << "ENOTSOCK" << std::endl; break;
+				default : std::cout << "Error inconnu !" << std::endl; break;
+			}
+		}
 		return (bytes);
 	}
 
 	ssize_t sync_recvfrom(
-		socket_type sockfd,
+		netio::detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -70,13 +85,14 @@ namespace socket_ops {
 			bytes = socket_ops::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
 			if (bytes >= 0)
 				return (bytes);
+			std::cout << "POLL READ" << std::endl;
 			if (!socket_ops::poll_read(sockfd))
 				return (0);
 		}
 	}
 
 	ssize_t sendto(
-		socket_type sockfd,
+		netio::detail::socket_type sockfd,
 		const void* buffer,
 		size_t len,
 		int flags,
@@ -91,7 +107,7 @@ namespace socket_ops {
 	}
 
 	ssize_t sync_sendto(
-		socket_type sockfd,
+		netio::detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -122,7 +138,7 @@ namespace socket_ops {
 		return (returns);
 	}
 
-	bool poll_read(socket_type sockfd)
+	bool poll_read(netio::detail::socket_type sockfd)
 	{
 		pollfd fds;
 		fds.fd = sockfd;
@@ -136,7 +152,7 @@ namespace socket_ops {
 		return (true);
 	}
 
-	bool poll_write(socket_type sockfd)
+	bool poll_write(netio::detail::socket_type sockfd)
 	{
 		pollfd fds;
 		fds.fd = sockfd;
