@@ -1,26 +1,32 @@
-#include <sys/types.h>
+#include <iostream>
+
 #include <sys/socket.h>
 #include <poll.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
 
 #include "socket_types.hpp"
+#include "socket_ops.hpp"
 
-namespace NetIO {
+namespace netio {
+namespace ip {
 namespace detail {
 namespace socket_ops {
 
-	inline socket_type socket(
+	socket_type socket(
 		int domain,
 		int type,
 		int protocol
 	)
 	{
-		socket_type s = ::socket(domain, type, protocol);
-		if (s == invalid_socket)
+		socket_type sockfd = ::socket(domain, type, protocol);
+		if (sockfd == invalid_socket)
 			return (invalid_socket);
-		return (s);
+		return (sockfd);
 	}
 
-	inline bool bind(
+	bool bind(
 		socket_type sockfd,
 		struct sockaddr *addr,
 		socklen_t addrlen
@@ -35,7 +41,7 @@ namespace socket_ops {
 		return (success);
 	}
 
-	inline ssize_t recvfrom(
+	ssize_t recvfrom(
 		socket_type sockfd,
 		void *buffer,
 		size_t len,
@@ -64,12 +70,12 @@ namespace socket_ops {
 			bytes = socket_ops::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
 			if (bytes >= 0)
 				return (bytes);
-			if (!poll_read(sockfd))
+			if (!socket_ops::poll_read(sockfd))
 				return (0);
 		}
 	}
 
-	inline ssize_t sendto(
+	ssize_t sendto(
 		socket_type sockfd,
 		const void* buffer,
 		size_t len,
@@ -79,6 +85,8 @@ namespace socket_ops {
 	)
 	{
 		ssize_t bytes = ::sendto(sockfd, buffer, len, flags, addr, addrlen);
+		if (!(bytes >= 0))
+			std::cout << "ERROR detail::sendto" << std::endl;
 		return (bytes);
 	}
 
@@ -88,7 +96,7 @@ namespace socket_ops {
 		size_t len,
 		int flags,
 		struct sockaddr *addr,
-		socklen_t *addrlen
+		socklen_t addrlen
 	)
 	{
 		ssize_t bytes = 0;
@@ -97,12 +105,14 @@ namespace socket_ops {
 			bytes = socket_ops::sendto(sockfd, buffer, len, flags, addr, addrlen);
 			if (bytes >= 0)
 				return (bytes);
-			if (!poll_write(sockfd))
+			/*
+			if (!socket_ops::poll_write(sockfd))
 				return (0);
+			*/
 		}
 	}
 
-	inline int poll(
+	int poll(
 		struct pollfd *fds,
 		nfds_t nfds,
 		int timeout
@@ -142,4 +152,5 @@ namespace socket_ops {
 
 } // !socket_ops
 } // !detail
-} // !NetIO
+} // !ip
+} // !netio
