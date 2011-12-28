@@ -14,6 +14,9 @@ namespace netio {
 
 		/// Methods.
 	public:
+		basic_datagram_socket()
+			: detail::basic_socket<Protocol>()
+		{;}
 		/*
 		**
 		*/
@@ -25,7 +28,6 @@ namespace netio {
 		*/
 		ssize_t recvfrom(typename Protocol::endpoint& from, void* buffer, size_t len)
 		{
-			ssize_t bytes = 0;
 			socklen_t size = from.size();
 			return detail::socket_ops::sync_recvfrom(
 				this->_socket,
@@ -34,6 +36,19 @@ namespace netio {
 				0,
 				reinterpret_cast<struct sockaddr*>(from.data()),
 				&size);
+		}
+		/*
+		**
+		*/
+		ssize_t sendto(typename Protocol::endpoint& to, void* buffer, size_t len)
+		{
+			return detail::socket_ops::sync_sendto(
+				this->_socket,
+				buffer,
+				len,
+				0,
+				reinterpret_cast<struct sockaddr*>(to.data()),
+				to.size());
 		}
 
 	};
