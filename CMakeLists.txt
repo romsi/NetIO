@@ -8,7 +8,7 @@ set(EXECUTABLE_OUTPUT_PATH ../bin)
 file(
 	GLOB_RECURSE
 	source_files
-	src/*
+	source/*
 )
 add_executable(
 	server
