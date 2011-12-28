@@ -1,60 +1,32 @@
 #include <iostream>
 
 #include "udp.hpp"
-#include "endpoint.hpp"
-#include "socket_ops.hpp"
 
-void client(int s)
+void client()
 {
-	netio::ip::endpoint to(2442, "localhost");
+	netio::ip::udp::socket socket;
+	socket.open(netio::ip::udp::v4());
+	netio::ip::udp::endpoint to(2442);
 	char buffer[] = "test";
-	if (netio::ip::detail::socket_ops::sendto(
-		s,
-		buffer,
-		sizeof(buffer),
-		0,
-		reinterpret_cast<struct sockaddr*>(to.data()),
-		to.size()) <= 0
-	)
-		std::cout << "SENDTO ERROR" << std::endl;
+	if (socket.sendto(to, buffer, sizeof(buffer)) <= 0)
+		std::cout << "ERROR SENDTO !" << std::endl;
 }
 
-void server(int s)
+void server()
 {
-	netio::ip::endpoint endpoint(2442);
-	if (!netio::ip::detail::socket_ops::bind(
-		s,
-		reinterpret_cast<struct sockaddr*>(endpoint.data()),
-		endpoint.size())
-	)
-		std::cout << "BIND ERROR" << std::endl;
-	
-	char buffer[1204];
-	netio::ip::endpoint from;
-	socklen_t size;
-	// ERROR RECVFROM
-	if (netio::ip::detail::socket_ops::recvfrom(
-		s,
-		buffer,
-		sizeof(buffer),
-		0,
-		reinterpret_cast<struct sockaddr*>(from.data()),
-		&size) <= 0
-	)
-		std::cout << "RECVFROM ERROR" << std::endl;
+	netio::ip::udp::endpoint endpoint(2442);
+	netio::ip::udp::socket socket(endpoint);
+	netio::ip::udp::endpoint from;
+	char buffer[1024];
+	if (socket.recvfrom(from, buffer, sizeof(buffer)) > 0)
+		std::cout << "MESSAGE : " << buffer << std::endl;
+	else
+		std::cout << "ERROR RECVFROM !" << std::endl;
 }
 
-main()
+int main()
 {
 	std::cout << "Start" << std::endl;
-	int s = netio::ip::detail::socket_ops::socket(
-		netio::ip::v4,
-		netio::ip::udp::type,
-		netio::ip::udp::protocol
-	);
-	if (s == netio::ip::detail::socket_ops::invalid_socket)
-		std::cout << "SOCKET ERROR" << std::endl;
-
-	server(s);
+	server();
 	std::cout << "End" << std::endl;
 }
