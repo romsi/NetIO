@@ -12,7 +12,9 @@
 
 namespace netio {
 namespace ip {
+namespace detail {
 
+	template<class InternetProtocol>
 	class endpoint
 	{
 
@@ -63,22 +65,27 @@ namespace ip {
 			return sizeof(_data);
 		}
 		// Get the native data.
-		ip::detail::socket_ops::sockaddr_in4_type* data()
+		netio::detail::sockaddr_in4_type* data()
 		{
 			return &_data;
 		}
 		// Get the native data.
-		const ip::detail::socket_ops::sockaddr_in4_type* data() const
+		const netio::detail::sockaddr_in4_type* data() const
 		{
 			return &_data;
+		}
+		InternetProtocol protocol() const
+		{
+			return InternetProtocol::v4();
 		}
 
 		/// Attributs.
 	private:
-		ip::detail::socket_ops::sockaddr_in4_type _data;
+		netio::detail::sockaddr_in4_type _data;
 
-	};
+	}; // !endpoint
 
+} // !detail
 } // !ip
 } // !netio
 
