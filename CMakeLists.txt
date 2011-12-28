@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 2.8)
 project(NetIO)
 set(EXECUTABLE_OUTPUT_PATH ../bin)
 
+include_directories(../source)
+
 #Configuration de l'exécutable
 file(
 	GLOB_RECURSE
 	source_files
-	source/*
+	source/*.cpp
 )
 add_executable(
 	server

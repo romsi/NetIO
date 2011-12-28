@@ -1,9 +1,8 @@
 #ifndef _BASIC_DATAGRAM_SOCKET_HPP_
 # define _BASIC_DATAGRAM_SOCKET_HPP_
 
-# include "socket_ops.hpp"
-
-# include "basic_socket.hpp"
+# include "detail/socket_ops.hpp"
+# include "detail/basic_socket.hpp"
 
 namespace netio {
 
