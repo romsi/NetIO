@@ -7,27 +7,29 @@
 # include "socket_types.hpp"
 
 namespace netio {
-namespace ip {
 namespace detail {
 namespace socket_ops {
 
 	// Create an endpoint for communication.
-	socket_type socket(
+	detail::socket_type socket(
 		int domain,
 		int type,
 		int protocol
 	);
 
+	// Close a socket.
+	bool close(detail::socket_type sockfd);
+
 	// Bind a name to a socket.
 	bool bind(
-		socket_type sockfd,
+		detail::socket_type sockfd,
 		struct sockaddr *addr,
 		socklen_t addrlen
 	);
 
 	// Receive a message from a socket.
 	ssize_t recvfrom(
-		socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -36,7 +38,7 @@ namespace socket_ops {
 	);
 
 	ssize_t sync_recvfrom(
-		socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -46,7 +48,7 @@ namespace socket_ops {
 
 	// Send a message on a socket.
 	ssize_t sendto(
-		socket_type sockfd,
+		detail::socket_type sockfd,
 		const void* buffer,
 		size_t len,
 		int flags,
@@ -55,7 +57,7 @@ namespace socket_ops {
 	);
 
 	ssize_t sync_sendto(
-		socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -70,13 +72,12 @@ namespace socket_ops {
 		int timeout
 	);
 
-	bool poll_read(socket_type sockfd);
+	bool poll_read(detail::socket_type sockfd);
 
-	bool poll_write(socket_type sockfd);
+	bool poll_write(detail::socket_type sockfd);
 
 } // !socket_ops
 } // !detail
-} // !ip
 } // !netio
 
 #endif /* !_SOCKET_OPS_HPP_ */
