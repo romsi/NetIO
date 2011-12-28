@@ -10,24 +10,28 @@
 #include "socket_ops.hpp"
 
 namespace netio {
-namespace ip {
 namespace detail {
 namespace socket_ops {
 
-	socket_type socket(
+	detail::socket_type socket(
 		int domain,
 		int type,
 		int protocol
 	)
 	{
-		netio::detail::socket_type sockfd = ::socket(domain, type, protocol);
-		if (sockfd == netio::detail::invalid_socket)
-			return (netio::detail::invalid_socket);
+		detail::socket_type sockfd = ::socket(domain, type, protocol);
+		if (sockfd == detail::invalid_socket)
+			return (detail::invalid_socket);
 		return (sockfd);
 	}
 
+	bool close(detail::socket_type sockfd)
+	{
+		return (::close(sockfd) == 0) ? true : false;
+	}
+
 	bool bind(
-		netio::detail::socket_type sockfd,
+		detail::socket_type sockfd,
 		struct sockaddr *addr,
 		socklen_t addrlen
 	)
@@ -41,7 +45,7 @@ namespace socket_ops {
 	}
 
 	ssize_t recvfrom(
-		netio::detail::socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -70,7 +74,7 @@ namespace socket_ops {
 	}
 
 	ssize_t sync_recvfrom(
-		netio::detail::socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -92,7 +96,7 @@ namespace socket_ops {
 	}
 
 	ssize_t sendto(
-		netio::detail::socket_type sockfd,
+		detail::socket_type sockfd,
 		const void* buffer,
 		size_t len,
 		int flags,
@@ -107,7 +111,7 @@ namespace socket_ops {
 	}
 
 	ssize_t sync_sendto(
-		netio::detail::socket_type sockfd,
+		detail::socket_type sockfd,
 		void *buffer,
 		size_t len,
 		int flags,
@@ -121,10 +125,9 @@ namespace socket_ops {
 			bytes = socket_ops::sendto(sockfd, buffer, len, flags, addr, addrlen);
 			if (bytes >= 0)
 				return (bytes);
-			/*
+			std::cout << "POLL WRITE" << std::endl;
 			if (!socket_ops::poll_write(sockfd))
 				return (0);
-			*/
 		}
 	}
 
@@ -138,7 +141,7 @@ namespace socket_ops {
 		return (returns);
 	}
 
-	bool poll_read(netio::detail::socket_type sockfd)
+	bool poll_read(detail::socket_type sockfd)
 	{
 		pollfd fds;
 		fds.fd = sockfd;
@@ -152,7 +155,7 @@ namespace socket_ops {
 		return (true);
 	}
 
-	bool poll_write(netio::detail::socket_type sockfd)
+	bool poll_write(detail::socket_type sockfd)
 	{
 		pollfd fds;
 		fds.fd = sockfd;
@@ -168,5 +171,4 @@ namespace socket_ops {
 
 } // !socket_ops
 } // !detail
-} // !ip
 } // !netio
