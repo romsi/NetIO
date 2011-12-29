@@ -4,21 +4,27 @@
 # include "socket_types.hpp"
 # include "socket_ops.hpp"
 
+# include "../io_service.hpp"
+
 namespace netio {
 namespace detail {
 
-	template<class Protocol>
+	template<typename Protocol, typename Service>
 	class basic_socket
 	{
+
+		typedef typename Protocol::endpoint endpoint_type;
+
 		/// Methods.
 	public:
-		basic_socket() : _socket(invalid_socket)
+		basic_socket(netio::io_service io_service)
+			: _service(io_service)
 		{;}
 		/*
 		**
 		*/
-		basic_socket(typename Protocol::endpoint& endpoint)
-			: _socket(invalid_socket)
+		basic_socket(netio::io_service io_service, endpoint_type& endpoint)
+			: _service(io_service)
 		{
 			Protocol protocol = endpoint.protocol();
 			if (!open(protocol))
@@ -38,42 +44,33 @@ namespace detail {
 		*/
 		bool open(const Protocol& protocol)
 		{
-			_socket = socket_ops::socket(
-				protocol.family(),
-				protocol.type(),
-				protocol.protocol()
-			);
-			return (_socket == invalid_socket) ? false : true;
-		}
-		bool is_open() const
-		{
-			return _socket != invalid_socket;
+			return _service.open(protocol);
 		}
 		/*
 		**
 		*/
-		bool bind(typename Protocol::endpoint& endpoint)
+		bool is_open() const
 		{
-			return socket_ops::bind(
-				_socket,
-				reinterpret_cast<struct sockaddr*>(endpoint.data()),
-				endpoint.size());
+			return _service.is_open();
+		}
+		/*
+		**
+		*/
+		bool bind(endpoint_type& endpoint)
+		{
+			return _service.bind(endpoint);
 		}
 		/*
 		**
 		*/
 		bool close()
 		{
-			if (!is_open())
-				return (true);
-			bool success = socket_ops::close(_socket);
-			_socket = invalid_socket;
-			return success;
+			return _service.close();
 		}
 
 		/// Attributs.
 	protected:
-		socket_type _socket;
+		Service _service;
 
 	}; // !basic_socket
 
