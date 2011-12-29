@@ -4,50 +4,62 @@
 # include "detail/socket_ops.hpp"
 # include "detail/basic_socket.hpp"
 
+# include "detail/datagram_socket_service.hpp"
+
 namespace netio {
 
-	template<class Protocol>
+	template<typename Protocol, typename DatagramSocketService = detail::datagram_socket_service<Protocol> >
 	class basic_datagram_socket
-		: public detail::basic_socket<Protocol>
+		: public detail::basic_socket<Protocol, DatagramSocketService>
 	{
+
+		typedef typename Protocol::endpoint endpoint_type;
 
 		/// Methods.
 	public:
-		basic_datagram_socket()
-			: detail::basic_socket<Protocol>()
+		basic_datagram_socket(netio::io_service io_service)
+			: detail::basic_socket<Protocol, DatagramSocketService>(io_service)
 		{;}
 		/*
 		**
 		*/
-		basic_datagram_socket(typename Protocol::endpoint& endpoint)
-			: detail::basic_socket<Protocol>(endpoint)
+		basic_datagram_socket(netio::io_service io_service, endpoint_type& endpoint)
+			: detail::basic_socket<Protocol, DatagramSocketService>(io_service, endpoint)
 		{;}
 		/*
 		**
 		*/
-		ssize_t recvfrom(typename Protocol::endpoint& from, void* buffer, size_t len)
+		ssize_t recvfrom(
+			endpoint_type& from,
+			void* buffer,
+			size_t len
+		)
 		{
-			socklen_t size = from.size();
-			return detail::socket_ops::sync_recvfrom(
-				this->_socket,
-				buffer,
-				len,
-				0,
-				reinterpret_cast<struct sockaddr*>(from.data()),
-				&size);
+			return this->_service.recvfrom(from, buffer, len);
 		}
 		/*
 		**
 		*/
-		ssize_t sendto(typename Protocol::endpoint& to, void* buffer, size_t len)
+		ssize_t sendto(
+			endpoint_type& to,
+			void* buffer,
+			size_t len
+		)
 		{
-			return detail::socket_ops::sync_sendto(
-				this->_socket,
-				buffer,
-				len,
-				0,
-				reinterpret_cast<struct sockaddr*>(to.data()),
-				to.size());
+			return this->_service.sendto(to, buffer, len);
+		}
+		/*
+		**
+		*/
+		template<typename ReadHandler>
+		void async_recvfrom(
+			endpoint_type& from,
+			void* buffer,
+			size_t& len,
+			ReadHandler handler
+		)
+		{
+			this->_service.async_recvfrom(from, buffer, len, handler);
 		}
 
 	};
