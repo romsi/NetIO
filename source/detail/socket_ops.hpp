@@ -46,6 +46,17 @@ namespace socket_ops {
 		socklen_t *addrlen
 	);
 
+	//
+	ssize_t non_blocking_recvfrom(
+		detail::socket_type sockfd,
+		void *buffer,
+		size_t len,
+		int flags,
+		struct sockaddr *addr,
+		socklen_t *addrlen,
+		size_t& bytes_transfered
+	);
+
 	// Send a message on a socket.
 	ssize_t sendto(
 		detail::socket_type sockfd,
