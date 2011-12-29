@@ -83,7 +83,6 @@ namespace socket_ops {
 	)
 	{
 		ssize_t bytes = 0;
-
 		for (;;)
 		{
 			bytes = socket_ops::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
@@ -92,6 +91,30 @@ namespace socket_ops {
 			std::cout << "POLL READ" << std::endl;
 			if (!socket_ops::poll_read(sockfd))
 				return (0);
+		}
+	}
+
+	ssize_t non_blocking_recvfrom(
+		detail::socket_type sockfd,
+		void *buffer,
+		size_t len,
+		int flags,
+		struct sockaddr *addr,
+		socklen_t *addrlen,
+		size_t& bytes_transfered
+	)
+	{
+		ssize_t bytes = 0;
+		for (;;)
+		{
+			bytes = socket_ops::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
+			if (bytes >= 0)
+			{
+				bytes_transfered = bytes;
+				return true;
+			}
+			bytes_transfered = 0;
+			return true;
 		}
 	}
 
