@@ -2,9 +2,9 @@
 
 #include "ip/udp.hpp"
 
-void client()
+void client(netio::io_service& io_service)
 {
-	netio::ip::udp::socket socket;
+	netio::ip::udp::socket socket(io_service);
 	socket.open(netio::ip::udp::v4());
 	netio::ip::udp::endpoint to(2442);
 	char buffer[] = "test";
@@ -12,10 +12,10 @@ void client()
 		std::cout << "ERROR SENDTO !" << std::endl;
 }
 
-void server()
+void server(netio::io_service& io_service)
 {
 	netio::ip::udp::endpoint endpoint(2442);
-	netio::ip::udp::socket socket(endpoint);
+	netio::ip::udp::socket socket(io_service, endpoint);
 	netio::ip::udp::endpoint from;
 	char buffer[1024];
 	if (socket.recvfrom(from, buffer, sizeof(buffer)) > 0)
@@ -26,7 +26,8 @@ void server()
 
 int main()
 {
+	netio::io_service io_service;
 	std::cout << "Start" << std::endl;
-	server();
+	server(io_service);
 	std::cout << "End" << std::endl;
 }
