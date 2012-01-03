@@ -14,7 +14,7 @@ namespace detail {
 
 	} // ! operations
 
-	typedef select_reactor multiplexer;
+	//typedef select_reactor multiplexer;
 
 } // !detail
 } // !netio
