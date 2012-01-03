@@ -3,40 +3,29 @@
 
 # include "socket_types.hpp"
 # include "reactor_op.hpp"
-// # include "multiplexer.hpp"
 
 # include "../io_service.hpp"
 
 namespace netio {
 namespace detail {
 
-	// A mettre dans le reactor.
-	namespace operations {
-		
-		enum operation_type
-		{
-			write = 1,
-			read
-		};
-
-	}
-
 	class reactive_socket_service
 	{
 
+		/// Methods.
 	public:
 		reactive_socket_service(netio::io_service& io_service)
-			// : _multiplexer(io_service)
+			: _service(io_service)
 		{;}
 		//
-		bool start_op(operations::operation_type type, socket_type socket, reactor_op* op)
+		bool start_op(operations::operation_type type, reactor_op* op)
 		{
-			// _multiplexer.start_op(type, socket, op);
-			return true;
+			return _service.register_task(type, op);
 		}
 
+		/// Attributs.
 	private:
-		// multiplexer _multiplexer;
+		netio::io_service& _service;
 
 	};
 
