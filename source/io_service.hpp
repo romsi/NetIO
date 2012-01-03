@@ -1,17 +1,21 @@
 #ifndef _IO_SERVICE_HPP_
 # define _IO_SERVICE_HPP_
 
-// # include "multiplexer.hpp"
-// multiplexer* _multiplexer;
+ # include "detail/task_io_service.hpp"
+ # include "detail/reactive_socket_service_fwd.hpp"
+ # include "detail/reactor_op.hpp"
+ # include "detail/multiplexer.hpp"
 
 namespace netio {
-
-// Pour enregistrer le reactor, penser au fonction friend.
 
 	typedef detail::task_io_service task_service_type;
 
 	class io_service
 	{
+		friend class detail::reactive_socket_service;
+
+		typedef detail::operations::operation_type operation_type;
+		typedef detail::reactor_op reactor_op;
 
 		/// Methods.
 	public:
@@ -30,7 +34,13 @@ namespace netio {
 		*/
 		bool stop()
 		{
-			_task.stop();
+			return _task.stop();
+		}
+
+	private:
+		bool register_task(operation_type type, reactor_op* op)
+		{
+			return _task.register_task(type, op);
 		}
 
 		/// Attributs.
