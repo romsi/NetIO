@@ -68,7 +68,7 @@ namespace detail {
 				buffer,
 				len,
 				0,
-				reinterpret_cast<struct sockaddr*>(from.data()),
+				from.data(),
 				&size);
 		}
 		//
@@ -83,19 +83,19 @@ namespace detail {
 				buffer,
 				len,
 				0,
-				reinterpret_cast<struct sockaddr*>(to.data()),
+				to.data(),
 				to.size());
 		}
 		//
-		template<typename ReadHandler>
+		template<typename Buffer, typename ReadHandler>
 		void async_recvfrom(
 			endpoint_type& from,
-			void* buffer,
-			size_t& len,
+			Buffer& buffer,
+			size_t len,
 			ReadHandler handler
 		)
 		{
-			reactor_op* op = new reactive_socket_recvfrom_op<endpoint_type, ReadHandler>(_socket, from, buffer, len, handler);
+			reactor_op* op = new reactive_socket_recvfrom_op<Buffer, endpoint_type, ReadHandler>(_socket, from, buffer, len, handler);
 			// start operation.
 			this->start_op(operations::read, _socket, op);
 		}
