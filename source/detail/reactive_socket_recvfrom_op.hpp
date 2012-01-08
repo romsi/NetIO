@@ -7,7 +7,7 @@
 namespace netio {
 namespace detail {
 
-	template<typename Endpoint, typename Handler>
+	template<typename Buffer, typename Endpoint, typename Handler>
 	class reactive_socket_recvfrom_op
 		: public reactor_op
 	{
@@ -16,7 +16,7 @@ namespace detail {
 		reactive_socket_recvfrom_op(
 			socket_type& socket,
 			Endpoint& endpoint,
-			void* buffer,
+			Buffer& buffer,
 			size_t len,
 			Handler handler
 		)
@@ -34,27 +34,28 @@ namespace detail {
 		static bool do_perform(reactor_op* base)
 		{
 			reactive_socket_recvfrom_op* op(static_cast<reactive_socket_recvfrom_op*>(base));
+			size_t addrlen = op->_endpoint.size();
 			return socket_ops::non_blocking_recvfrom(
 				op->_socket,
 		      	op->_buffer,
 		      	op->_len,
 		      	0,
-		      	op->destination_.data(),
-		      	op->destination_.size(),
-		      	op->bytes_transferred_);
+		      	op->_endpoint.data(),
+		      	&addrlen,
+		      	op->_bytes_transferred);
 		}
 		//
-		static void do_complete(reactor_op* base, size_t bytes_transfered)
+		static void do_complete(reactor_op* base, size_t bytes_transferred)
 		{
 			reactive_socket_recvfrom_op* op(static_cast<reactive_socket_recvfrom_op*>(base));
-			op->_handler(op->_endpoint, op->_buffer, bytes_transfered);
+			op->_handler(op->_endpoint, op->_buffer, bytes_transferred);
 		}
 
 		/// Attributs.
 	private:
 		socket_type& _socket;
 		Endpoint& _endpoint;
-		void* _buffer;
+		Buffer& _buffer;
 		size_t _len;
 		Handler _handler;
 
