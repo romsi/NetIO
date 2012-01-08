@@ -51,11 +51,11 @@ namespace netio {
 		/*
 		**
 		*/
-		template<typename ReadHandler>
+		template<typename Buffer, typename ReadHandler>
 		void async_recvfrom(
 			endpoint_type& from,
-			void* buffer,
-			size_t& len,
+			Buffer& buffer,
+			size_t len,
 			ReadHandler handler
 		)
 		{
