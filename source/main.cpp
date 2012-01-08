@@ -12,13 +12,18 @@ void client(netio::io_service& io_service)
 		std::cout << "ERROR SENDTO !" << std::endl;
 }
 
+void recvfromHandler(netio::ip::udp::endpoint& endpoint, void* buffer, size_t bytes_transfered)
+{
+	std::cout << "Call recvfrom handler" << std::endl;
+}
+
 void server(netio::io_service& io_service)
 {
 	netio::ip::udp::endpoint endpoint(2442);
 	netio::ip::udp::socket socket(io_service, endpoint);
 	netio::ip::udp::endpoint from;
 	char buffer[1024];
-	if (socket.recvfrom(from, buffer, sizeof(buffer)) > 0)
+	if (socket.async_recvfrom(from, buffer, sizeof(buffer), &recvfromHandler) > 0)
 		std::cout << "MESSAGE : " << buffer << std::endl;
 	else
 		std::cout << "ERROR RECVFROM !" << std::endl;
