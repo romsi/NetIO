@@ -17,13 +17,13 @@ namespace detail {
 
 		/// Methods.
 	public:
-		basic_socket(netio::io_service io_service)
+		basic_socket(netio::io_service& io_service)
 			: _service(io_service)
 		{;}
 		/*
 		**
 		*/
-		basic_socket(netio::io_service io_service, endpoint_type& endpoint)
+		basic_socket(netio::io_service& io_service, endpoint_type& endpoint)
 			: _service(io_service)
 		{
 			Protocol protocol = endpoint.protocol();
