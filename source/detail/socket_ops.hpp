@@ -54,7 +54,7 @@ namespace socket_ops {
 		int flags,
 		struct sockaddr *addr,
 		socklen_t *addrlen,
-		size_t& bytes_transfered
+		size_t& bytes_transferred
 	);
 
 	// Send a message on a socket.
