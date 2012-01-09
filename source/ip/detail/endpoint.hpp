@@ -65,14 +65,14 @@ namespace detail {
 			return sizeof(_data);
 		}
 		// Get the native data.
-		netio::detail::sockaddr_in4_type* data()
+		struct sockaddr* data()
 		{
-			return &_data;
+			return reinterpret_cast<struct sockaddr*>(&_data);
 		}
 		// Get the native data.
 		const netio::detail::sockaddr_in4_type* data() const
 		{
-			return &_data;
+			return reinterpret_cast<struct sockaddr*>(&_data);
 		}
 		InternetProtocol protocol() const
 		{
