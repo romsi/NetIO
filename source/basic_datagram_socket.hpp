@@ -17,13 +17,13 @@ namespace netio {
 
 		/// Methods.
 	public:
-		basic_datagram_socket(netio::io_service io_service)
+		basic_datagram_socket(netio::io_service& io_service)
 			: detail::basic_socket<Protocol, DatagramSocketService>(io_service)
-		{;}
+		{;}	
 		/*
 		**
 		*/
-		basic_datagram_socket(netio::io_service io_service, endpoint_type& endpoint)
+		basic_datagram_socket(netio::io_service& io_service, endpoint_type& endpoint)
 			: detail::basic_socket<Protocol, DatagramSocketService>(io_service, endpoint)
 		{;}
 		/*
