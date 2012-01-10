@@ -38,11 +38,12 @@ namespace detail {
 			socket_type max_writefd = _writefds.set_all(_op_queue[operations::write].get_descriptors());
 			socket_type max_fd = (max_readfd > max_writefd) ? max_readfd : max_writefd;
 			std::cout << "Max fd: " << max_fd << std::endl;
+			_op_queue[operations::read].perform_operation(max_fd);
 			ssize_t ready = 0;
 			if ((ready = ::select(max_fd + 1, &(_readfds.data), &(_writefds.data), 0, 0)) == -1)
 				perror("select");
 			std::cout << "Descriptor ready: " << ready << std::endl;
-			return ready;
+			return (ready == -1) ? 0 : ready;
 		}
 
 		/// Attributs.
@@ -75,6 +76,7 @@ namespace detail {
 			//
 			void set(Descriptor& fd)
 			{
+				std::cout << "FD: " << fd << std::endl;
 				FD_SET(fd, &data);
 			}
 
