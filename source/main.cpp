@@ -28,6 +28,8 @@ void server(netio::io_service& io_service)
 	char buffer[1024];
 	/*
 	** SYNC
+	*/
+	/*
 	if (socket.recvfrom(from, buffer, sizeof(buffer)) > 0)
 		std::cout << "MESSAGE : " << buffer << std::endl;
 	else
