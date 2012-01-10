@@ -21,7 +21,10 @@ namespace socket_ops {
 	{
 		detail::socket_type sockfd = ::socket(domain, type, protocol);
 		if (sockfd == detail::invalid_socket)
+		{
+			perror("socket");
 			return (detail::invalid_socket);
+		}
 		return (sockfd);
 	}
 
@@ -38,6 +41,7 @@ namespace socket_ops {
 	{
 		if (::bind(sockfd, addr, addrlen) == -1)
 		{
+			perror("bind");
 			::close(sockfd);
 			return (false);
 		}
@@ -55,21 +59,7 @@ namespace socket_ops {
 	{
 		ssize_t bytes = ::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
 		if (bytes == -1)
-		{
-			switch (errno)
-			{
-				case EBADF : std::cout << "EBADF" << std::endl; break;
-				case EAGAIN : std::cout << "EAGAIN" << std::endl; break;
-				case ECONNREFUSED : std::cout << "ECONNREFUSED" << std::endl; break;
-				case EFAULT : std::cout << "EFAULT" << std::endl; break;
-				case EINTR : std::cout << "EINTR" << std::endl; break;
-				case EINVAL : std::cout << "EINVAL" << std::endl; break;
-				case ENOMEM : std::cout << "ENOMEM" << std::endl; break;
-				case ENOTCONN : std::cout << "ENOTCONN" << std::endl; break;
-				case ENOTSOCK : std::cout << "ENOTSOCK" << std::endl; break;
-				default : std::cout << "Error inconnu !" << std::endl; break;
-			}
-		}
+			perror("recvfrom");
 		return (bytes);
 	}
 
@@ -101,7 +91,7 @@ namespace socket_ops {
 		int flags,
 		struct sockaddr *addr,
 		socklen_t *addrlen,
-		size_t& bytes_transfered
+		size_t& bytes_transferred
 	)
 	{
 		ssize_t bytes = 0;
@@ -110,10 +100,10 @@ namespace socket_ops {
 			bytes = socket_ops::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
 			if (bytes >= 0)
 			{
-				bytes_transfered = bytes;
+				bytes_transferred = bytes;
 				return true;
 			}
-			bytes_transfered = 0;
+			bytes_transferred = 0;
 			return true;
 		}
 	}
