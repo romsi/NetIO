@@ -33,13 +33,25 @@ namespace detail {
 		std::queue<socket_type> get_descriptors()
 		{
 			std::queue<socket_type> descriptors;
-			op_map_type::iterator i;
-			for (i = _op_map.begin(); i != _op_map.end(); i++)
+			for (op_map_type::iterator i = _op_map.begin(); i != _op_map.end(); i++)
     			descriptors.push((*i).first);
 			return descriptors;
 		}
 		//
-		bool perform_operation(socket_type socket, reactor_op* op);
+		bool perform_operation(socket_type socket)
+		{
+			op_map_type::iterator i = _op_map.find(socket);
+			if (i != _op_map.end())
+			{
+				while (!(*i).second->empty())
+				{
+					(*i).second->front()->perform();
+					(*i).second->pop();
+				}
+				return true;
+			}
+			return false;
+		}
 		
 		/// Attributs.
 	private:
