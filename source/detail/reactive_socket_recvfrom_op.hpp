@@ -53,9 +53,9 @@ namespace detail {
 
 		/// Attributs.
 	private:
-		socket_type& _socket;
-		Endpoint& _endpoint;
-		Buffer& _buffer;
+		socket_type _socket;
+		Endpoint _endpoint;
+		Buffer _buffer;
 		size_t _len;
 		Handler _handler;
 
