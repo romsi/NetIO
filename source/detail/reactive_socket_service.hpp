@@ -21,7 +21,7 @@ namespace detail {
 			: _service(io_service)
 		{;}
 		//
-		bool start_op(operation_type type, socket_type socket, reactor_op* op)
+		bool start_op(operation_type type, socket_type& socket, reactor_op* op)
 		{
 			return _service.start_op(type, socket, op);
 		}
