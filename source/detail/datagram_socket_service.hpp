@@ -43,7 +43,7 @@ namespace detail {
 		{
 			return socket_ops::bind(
 				_socket,
-				reinterpret_cast<struct sockaddr*>(endpoint.data()),
+				endpoint.data(),
 				endpoint.size());
 		}
 		//
