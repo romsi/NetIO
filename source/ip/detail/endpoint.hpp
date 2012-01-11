@@ -26,6 +26,10 @@ namespace detail {
 			_data.sin_port = 0;
 			_data.sin_addr.s_addr = INADDR_ANY;
 		}
+		endpoint(const endpoint& e)
+		{
+			(*this) = e;
+		}
 		endpoint(in_port_t port_num)
 		{
 			_data.sin_family = ip::v4;
@@ -43,6 +47,11 @@ namespace detail {
 				_data.sin_port = htons(port_num);
 				_data.sin_addr.s_addr = *(in_addr_t *)hostinfo->h_addr;	
 			}
+		}
+		endpoint& operator=(const endpoint& e)
+		{
+			_data = e._data;
+			return (*this);
 		}
 		// Get the address family.
 		int family() const
