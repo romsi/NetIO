@@ -14,7 +14,7 @@ namespace netio {
 
 	class io_service
 	{
-		//friend class detail::reactive_socket_service;
+		friend class detail::reactive_socket_service;
 
 		typedef detail::operations::operation_type operation_type;
 		typedef detail::reactor_op reactor_op;
@@ -39,7 +39,8 @@ namespace netio {
 			return _task.stop();
 		}
 
-		bool start_op(operation_type type, detail::socket_type socket, reactor_op* op)
+	private:
+		bool start_op(operation_type type, detail::socket_type& socket, reactor_op* op)
 		{
 			return _task.register_task(type, socket, op);
 		}
