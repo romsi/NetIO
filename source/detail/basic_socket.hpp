@@ -34,11 +34,6 @@ namespace detail {
 				std::cout << "BIND ERROR" << std::endl;
 			// On error, throw exception.
 		}
-		~basic_socket()
-		{
-			if (!close())
-				std::cout << "CLOSE ERROR" << std::endl;
-		}
 		/*
 		**
 		*/
