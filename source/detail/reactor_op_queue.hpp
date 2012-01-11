@@ -23,7 +23,7 @@ namespace detail {
 		reactor_op_queue()
 		{;}
 		//
-		bool enqueue(socket_type socket, reactor_op* op)
+		bool enqueue(socket_type& socket, reactor_op* op)
 		{
 			std::pair<op_map_type::iterator, bool> ret = _op_map.insert(op_map_type::value_type(socket, new op_queue_type));
 			ret.first->second->push(op);
@@ -38,16 +38,19 @@ namespace detail {
 			return descriptors;
 		}
 		//
-		bool perform_operation(socket_type socket)
+		bool perform_operation(socket_type& socket)
 		{
 			op_map_type::iterator i = _op_map.find(socket);
 			if (i != _op_map.end())
 			{
 				while (!(*i).second->empty())
 				{
-					(*i).second->front()->perform();
-					(*i).second->pop();
+					if ((*i).second->front()->perform())
+						(*i).second->front()->complete();
+					delete (*i).second->front();
+					(*i).second->pop();	
 				}
+				_op_map.erase(i);
 				return true;
 			}
 			return false;
