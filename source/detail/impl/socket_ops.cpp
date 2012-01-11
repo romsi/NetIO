@@ -58,8 +58,11 @@ namespace socket_ops {
 	)
 	{
 		ssize_t bytes = ::recvfrom(sockfd, buffer, len, flags, addr, addrlen);
-		if (bytes == -1)
+		if (bytes == -1) {
 			perror("recvfrom");
+			
+		}
+			
 		return (bytes);
 	}
 
