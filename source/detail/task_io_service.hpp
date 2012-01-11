@@ -32,7 +32,7 @@ namespace netio {
 				// return _multiplexer.stop();
 			}
 			//
-			bool register_task(operation_type type, socket_type socket, reactor_op* op)
+			bool register_task(operation_type type, socket_type& socket, reactor_op* op)
 			{
 				return _multiplexer.start_op(type, socket, op);
 			}
