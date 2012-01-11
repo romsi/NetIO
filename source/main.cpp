@@ -18,6 +18,8 @@ void client(netio::io_service& io_service)
 void recvfromHandler(netio::ip::udp::endpoint& endpoint, void* buffer, size_t bytes_transfered)
 {
 	std::cout << "Call recvfrom handler" << std::endl;
+	std::cout << "Endpoint port: " << endpoint.port() << std::endl;
+	std::cout << "Buffer[" << bytes_transfered << "]: " << (char*)buffer << std::endl;
 }
 
 void server(netio::io_service& io_service)
@@ -25,12 +27,12 @@ void server(netio::io_service& io_service)
 	netio::ip::udp::endpoint endpoint(2442);
 	netio::ip::udp::socket socket(io_service, endpoint);
 	netio::ip::udp::endpoint from;
-	char buffer[1024];
+	char* buffer = new char[1024];
 	/*
 	** SYNC
 	*/
 	/*
-	if (socket.recvfrom(from, buffer, sizeof(buffer)) > 0)
+	if (socket.recvfrom(from, buffer, 1024) > 0)
 		std::cout << "MESSAGE : " << buffer << std::endl;
 	else
 		std::cout << "ERROR RECVFROM !" << std::endl;
@@ -38,7 +40,7 @@ void server(netio::io_service& io_service)
 	/*
 	** ASYNC
 	*/
-	socket.async_recvfrom(from, buffer, sizeof(buffer), &recvfromHandler);
+	socket.async_recvfrom(from, buffer, 1024, &recvfromHandler);
 }
 
 int main()
@@ -46,6 +48,6 @@ int main()
 	netio::io_service io_service;
 	std::cout << "Start" << std::endl;
 	server(io_service);
-	io_service.run();
+	while (io_service.run());
 	std::cout << "End" << std::endl;
 }
