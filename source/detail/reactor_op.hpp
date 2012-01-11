@@ -18,9 +18,9 @@ namespace detail {
 		{
 			return _perform_func(this);
 		}
-		void complete(size_t bytes_transferred)
+		void complete()
 		{
-			_complete_func(this, bytes_transferred);
+			_complete_func(this, _bytes_transferred);
 		}
 
 	protected:
