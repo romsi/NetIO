@@ -61,6 +61,19 @@ namespace netio {
 		{
 			this->_service.async_recvfrom(from, buffer, len, handler);
 		}
+		/*
+		**
+		*/
+		template<typename Buffer, typename WriteHandler>
+		void async_sendto(
+			endpoint_type& to,
+			Buffer& buffer,
+			size_t len,
+			WriteHandler handler
+		)
+		{
+			this->_service.async_sendto(to, buffer, len, handler);
+		}
 
 	};
 
