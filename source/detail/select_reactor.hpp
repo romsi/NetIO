@@ -4,6 +4,7 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 # include <stdio.h>
 # include <errno.h>
@@ -92,18 +93,18 @@ namespace detail {
 			has_work = !(ready == -1);
 			if (!has_work)
 				return 0;
-			perform_operation(_readfds);
-			perform_operation(_writefds);
+			perform_operation(_readfds, operations::read);
+			perform_operation(_writefds, operations::write);
 			return ready;
 		}
 	private:
-		void perform_operation(fdset<socket_type>& data)
+		void perform_operation(fdset<socket_type>& data, operations::operation_type type)
 		{
-			std::queue<socket_type> descriptors = _op_queue[operations::read].get_descriptors();
+			std::queue<socket_type> descriptors = _op_queue[type].get_descriptors();
 			while (!descriptors.empty())
 			{
 				if (data.isset(descriptors.front()))
-					_op_queue[operations::read].perform_operation(descriptors.front());
+					_op_queue[type].perform_operation(descriptors.front());
 				descriptors.pop();
 			}
 		}
