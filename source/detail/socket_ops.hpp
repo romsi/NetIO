@@ -76,6 +76,17 @@ namespace socket_ops {
 		socklen_t addrlen
 	);
 
+	//
+	ssize_t non_blocking_sendto(
+		detail::socket_type sockfd,
+		void *buffer,
+		size_t len,
+		int flags,
+		struct sockaddr *addr,
+		socklen_t addrlen,
+		size_t& bytes_transferred
+	);
+
 	// Wait for some event on a file descriptor.
 	int poll(
 		struct pollfd *fds,
