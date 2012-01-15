@@ -30,12 +30,16 @@ namespace detail {
 			return true;
 		}
 		//
-		std::queue<socket_type> get_descriptors()
+		std::queue<socket_type> get_descriptors() const
 		{
 			std::queue<socket_type> descriptors;
-			for (op_map_type::iterator i = _op_map.begin(); i != _op_map.end(); i++)
+			for (op_map_type::const_iterator i = _op_map.begin(); i != _op_map.end(); i++)
     			descriptors.push((*i).first);
 			return descriptors;
+		}
+		bool empty() const
+		{
+			return _op_map.empty();
 		}
 		//
 		bool perform_operation(socket_type& socket)
@@ -43,10 +47,15 @@ namespace detail {
 			op_map_type::iterator i = _op_map.find(socket);
 			if (i != _op_map.end())
 			{
+
 				while (!(*i).second->empty())
 				{
-					if ((*i).second->front()->perform())
-						(*i).second->front()->complete();
+					if (!((*i).second->front()->perform()))
+					{
+						std::cout << "Perform failed !" << std::endl;
+						return false;	
+					}
+					(*i).second->front()->complete();
 					delete (*i).second->front();
 					(*i).second->pop();	
 				}
