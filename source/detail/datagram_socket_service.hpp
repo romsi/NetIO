@@ -5,6 +5,7 @@
 # include "reactor_op.hpp"
 # include "reactive_socket_service.hpp"
 # include "reactive_socket_recvfrom_op.hpp"
+# include "reactive_socket_sendto_op.hpp"
 
 # include "../io_service.hpp"
 
@@ -98,6 +99,19 @@ namespace detail {
 			reactor_op* op = new reactive_socket_recvfrom_op<Buffer, endpoint_type, ReadHandler>(_socket, from, buffer, len, handler);
 			// start operation.
 			this->start_op(operations::read, _socket, op);
+		}
+		//
+		template<typename Buffer, typename WriteHandler>
+		void async_sendto(
+			endpoint_type& from,
+			Buffer& buffer,
+			size_t len,
+			WriteHandler handler
+		)
+		{
+			reactor_op* op = new reactive_socket_sendto_op<Buffer, endpoint_type, WriteHandler>(_socket, from, buffer, len, handler);
+			// start operation.
+			this->start_op(operations::write, _socket, op);
 		}
 
 		/// Attributs.
